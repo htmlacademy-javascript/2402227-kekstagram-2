@@ -1,83 +1,46 @@
-// Задача 1
-const getLength = (string = '', maxSymbols = 1) => string.length <= maxSymbols;
+// Задача 1 - Функция для проверки длины строки -------------------------------------------------------------------------------------------------------------------------------------------------------
+const checkStringLength = (string, symbolsNumber) => string.length <= symbolsNumber;
 
-getLength();
+checkStringLength('проверяемая строка', 20);
+checkStringLength('проверяемая строка', 18);
+checkStringLength('проверяемая строка', 10);
 
-// Задача 2
+// Задача 2 - Функция для проверки, является ли строка палиндромом -------------------------------------------------------------------------------------------------------------------------------
 const isPalindrom = (string) => {
+  const upperCaseString = string.toUpperCase();
+  let newString = '';
 
-  string = string.replaceAll(' ', '');
-  string = string.toLowerCase();
-
-  let normalizedString = '';
-
-  for (let i = string.length - 1; i >= 0; i--) {
-    normalizedString += string[i];
+  for (let i = upperCaseString.length - 1; i >= 0; i--) {
+    const currentSymbol = upperCaseString[i];
+    newString += currentSymbol;
   }
 
-  return string === normalizedString;
+  return newString === upperCaseString;
 };
 
-isPalindrom();
+isPalindrom('топот');
+isPalindrom('ДовОд');
+isPalindrom('Кекс');
 
-// Задача 3
-const isNumber = (string = '') => {
-  let result = '';
+// Задача 3 - Функция принимает строку, извлекает содержащиеся в ней цифры от 0 до 9 и возвращает их в виде целого положительного числа. Если в строке нет ни одной цифры, функция должна вернуть NaN.
+const parseNumber = (string) => {
+  let newString = '';
 
-  string = string.toString();
+  for (let i = 0; i < string.length; i++) {
+    const currentSymbol = string[i];
 
-  for (let i = 0; i <= string.length - 1; i++) {
-    if (Number.isNaN(parseInt(string[i], 10)) === false) {
-      result += string[i];
+    if (!isNaN(parseInt(currentSymbol, 10))) {
+      newString += currentSymbol;
     }
   }
 
-  return result === '' ? NaN : Number(result);
+  const intValue = parseInt(newString, 10);
+
+  return isNaN(intValue) ? NaN : intValue;
 };
 
-isNumber('2023 год');
-
-// варианты задачи 1--------------------------------------------------------------------------------------
-/* variant 1 - function declaration
-function getLength (string = '', maxSymbols = 1) {
-  return string.length <= maxSymbols;
-}
-
-getLength('some text', 20);
-getLength('some text of 18 sym', 18);
-getLength('some text of 18 sym', 10);
-*/
-
-/* variant 2 - function expression
-const text = 'Какая-то строка больше 20 символов';
-function getLengthComparison () {
-  return (text.length <= 20) ? 'true' : 'false';
-}
-
-getLengthComparison(text);
-*/
-
-/* variant 2 - function expression
-const text = function () {
-  return (text.length <= 20) ? 'true' : 'false';
-}
-*/
-
-/* variant 3 - function expression - стрелочная
-const text = () => {
-  return (text.length <= 20) ? 'true' : 'false';
-}
-*/
-
-/*  variant 4 - if else
-const length = 'Какая-то строка больше 20 символов';
-  function getSymbols () {
-    if (length <= 20 || length === 18) {
-      return true;
-    } else {
-        return false;
-      }
-  }
-
-getSymbols(length);
-*/
+parseNumber('2023 год');
+parseNumber('ECMAScript 2022');
+parseNumber('1 кефир, 0.5 батона');
+parseNumber('агент 007');
+parseNumber('а я томат');

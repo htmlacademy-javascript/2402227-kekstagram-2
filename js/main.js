@@ -26,7 +26,7 @@ const NAMES = [
 ];
 
 
-const MESSAGE = [
+const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра.',
@@ -38,21 +38,35 @@ const MESSAGE = [
 
 const DESCRIPTIONS = [
   'Личное фото',
-  'Рабочее фото'
+  'Рабочее фото',
+  'Семейное фото',
+  'Детское фото'
 ];
 
 const PHOTOS_NUMBER = 25;
-let COMMENT_COUNT = 0;
+
+const MIN_LIKES = 15;
+const MAX_LIKES = 200;
+
+const MIN_COMMENTS = 0;
+const MAX_COMMENTS = 30;
+
+const MIN_AVATAR_NUMBER = 1;
+const MAX_AVATAR_NUMBER = 6;
+
+let commentCount = 0;
 
 const getCommentId = () => {
-  COMMENT_COUNT += 1;
-  return COMMENT_COUNT;
+  commentCount += 1;
+
+  return commentCount;
 };
 
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
   const result = Math.random() * (upper - lower + 1) + lower;
+
   return Math.floor(result);
 };
 
@@ -61,10 +75,11 @@ const getRandomArrayElement = (elements) => elements[getRandomInteger(0, element
 
 const createComment = () => {
   const name = getRandomArrayElement(NAMES);
-  const photoMassage = getRandomArrayElement(MESSAGE);
+  const photoMassage = getRandomArrayElement(MESSAGES);
+
   return {
     id: getCommentId(),
-    avatar: `img/avatar-${ getRandomInteger(1, 6) }.svg`,
+    avatar: `img/avatar-${ getRandomInteger(MIN_AVATAR_NUMBER, MAX_AVATAR_NUMBER) }.svg`,
     message: photoMassage,
     name: name,
   };
@@ -72,18 +87,27 @@ const createComment = () => {
 
 const createPhoto = (id) => {
   const description = getRandomArrayElement(DESCRIPTIONS);
-  const numberComments = getRandomInteger(0, 30);
+  const numberComments = getRandomInteger(MIN_COMMENTS, MAX_COMMENTS);
+
   return {
     id: id,
     url: `photos/${ id }.jpg`,
     description: description,
-    likes: getRandomInteger(15, 200),
+    likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
     comments: Array.from({length: numberComments}, createComment),
   };
 };
 
 /**создания массива из 25 сгенерированных объектов.  */
-const photos = [];
-for (let i = 1; photos.length < PHOTOS_NUMBER; i++) {
-  photos.push(createPhoto(i));
-}
+
+const getPhotos = () => {
+  const photos = [];
+
+  for (let i = 0; i < PHOTOS_NUMBER; i++) {
+    photos.push(createPhoto(i));
+  }
+
+  return photos;
+};
+
+getPhotos();

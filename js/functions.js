@@ -79,7 +79,7 @@ const workingHours = (workingStartTime, workingEndTime, meetingStartTime, meetin
   const meetingEndMinutes = getMeetingDuration(meetingStartTime, meetingLengthTime);
 
   // условие проверки
-  if (meetingEndMinutes <= endWorkingHours && meetingStartMinutes >= startWorkingHours) {
+  if (meetingEndMinutes <= endWorkingHours && meetingStartMinutes) {
     return true;
   } else {
     return false;

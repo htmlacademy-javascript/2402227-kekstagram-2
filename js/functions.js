@@ -73,7 +73,6 @@ const getMeetingDuration = (meetingStartTime, meetingLengthTime) => {
 
 // основная функция
 const workingHours = (workingStartTime, workingEndTime, meetingStartTime, meetingLengthTime) => {
-  const startWorkingHours = getMinutesTime(workingStartTime);
   const endWorkingHours = getMinutesTime(workingEndTime);
   const meetingStartMinutes = getMinutesTime(meetingStartTime);
   const meetingEndMinutes = getMeetingDuration(meetingStartTime, meetingLengthTime);

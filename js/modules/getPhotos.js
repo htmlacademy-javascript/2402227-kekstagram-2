@@ -1,5 +1,5 @@
 import { NAMES, MESSAGES, DESCRIPTIONS } from './dataset.js';
-import { getRandomInteger, getRandomArrayElement } from './random.js';
+import { getRandomInteger, getRandomArrayElement } from './utils.js';
 
 const PHOTOS_NUMBER = 25;
 

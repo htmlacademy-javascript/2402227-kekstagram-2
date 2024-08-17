@@ -47,14 +47,14 @@ const createPhoto = (id) => {
 
 /**создания массива из 25 сгенерированных объектов.  */
 
-const getPhotos = () => {
+const createData = () => {
   const photos = [];
 
   for (let i = 0; i < PHOTOS_NUMBER; i++) {
-    photos.push(createPhoto(i));
+    photos.push(createPhoto(i + 1));
   }
 
   return photos;
 };
 
-export { getPhotos };
+export { createData };

@@ -1,5 +1,3 @@
-import { getPhotos } from './modules/getPhotos.js';
+import { renderPictures } from './modules/renderPictures.js';
 
-getPhotos();
-
-import './modules/getMiniatures.js';
+renderPictures();

@@ -1,13 +1,10 @@
-
-import { createData } from './dataPictures.js';
-
 const template = document.querySelector('#picture').content.querySelector('.picture');
-const container = document.querySelector('.pictures');
+const pictureListElement = document.querySelector('.pictures');
 
-function renderPictures() {
-  const render = createData();
+const pictureListFragment = document.createDocumentFragment();
 
-  render.forEach((photo) => {
+const renderPictures = (pictures) => {
+  pictures.forEach((photo) => {
     const templatePicture = template.cloneNode(true);
     const image = templatePicture.querySelector('.picture__img');
 
@@ -17,8 +14,10 @@ function renderPictures() {
     templatePicture.querySelector('.picture__comments').textContent = photo.comments.length;
     templatePicture.querySelector('.picture__likes').textContent = photo.likes;
 
-    container.appendChild(templatePicture);
+    pictureListFragment.appendChild(templatePicture);
   });
-}
+
+  pictureListElement.appendChild(pictureListFragment);
+};
 
 export { renderPictures };

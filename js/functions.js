@@ -45,46 +45,90 @@ parseNumber('1 кефир, 0.5 батона');
 parseNumber('агент 007');
 parseNumber('а я томат');
 
-// Задача 5
+// Задача 5 - вариант 1 ------------------------------------------------------------------------------------------------------------------------------------------------
 
+// // извлечь время из строки и преобразовать в число
+// const getTime = (time) => {
+//   const hours = parseInt(time.split(':')[0], 10);
+//   const minutes = parseInt(time.split(':')[1], 10);
+
+//   return { hours, minutes };
+// };
+
+// // перевести часы в минуты
+// const getMinutesTime = (time) => {
+//   const { hours, minutes } = getTime(time);
+//   const minutesLength = hours * 60 + minutes;
+
+//   return minutesLength;
+// };
+
+// // вычислить длительность митинга
+// const getMeetingDuration = (meetingStartTime, meetingLengthTime) => {
+//   const meetingStartMinutes = getMinutesTime(meetingStartTime);
+//   const meetingEndMinutes = meetingStartMinutes + meetingLengthTime;
+
+//   return meetingEndMinutes;
+// };
+
+// // основная функция
+// const workingHours = (workingStartTime, workingEndTime, meetingStartTime, meetingLengthTime) => {
+//   const endWorkingHours = getMinutesTime(workingEndTime);
+//   const meetingStartMinutes = getMinutesTime(meetingStartTime);
+//   const meetingEndMinutes = getMeetingDuration(meetingStartTime, meetingLengthTime);
+
+//   // условие проверки
+//   if (meetingEndMinutes <= endWorkingHours && meetingStartMinutes) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// };
+
+
+// workingHours('08:00', '17:30', '14:00', 90);
+// workingHours('8:0', '10:0', '8:0', 120);
+// workingHours('08:00', '14:30', '14:00', 90);
+// workingHours('14:00', '17:30', '08:0', 90);
+// workingHours('8:00', '17:30', '08:00', 900);
+
+// Задача 5 - вариант 2 ---------------------------------------------------------------------------------------------------------------------------------------------
 // извлечь время из строки и преобразовать в число
 const getTime = (time) => {
   const hours = parseInt(time.split(':')[0], 10);
   const minutes = parseInt(time.split(':')[1], 10);
 
-  return { hours, minutes };
+  return { hours: hours, minutes: minutes };
 };
 
 // перевести часы в минуты
 const getMinutesTime = (time) => {
-  const { hours, minutes } = getTime(time);
-  const minutesLength = hours * 60 + minutes;
+  const parsedTime = getTime(time);
 
-  return minutesLength;
+  return parsedTime.hours * 60 + parsedTime.minutes;
 };
 
-// вычислить длительность митинга
-const getMeetingDuration = (meetingStartTime, meetingLengthTime) => {
+// вычислить окончание митинга
+const getMeetingEndTime = (meetingStartTime, meetingLengthTime) => {
   const meetingStartMinutes = getMinutesTime(meetingStartTime);
-  const meetingEndMinutes = meetingStartMinutes + meetingLengthTime;
 
-  return meetingEndMinutes;
+  return meetingStartMinutes + meetingLengthTime;
 };
 
 // основная функция
 const workingHours = (workingStartTime, workingEndTime, meetingStartTime, meetingLengthTime) => {
-  const endWorkingHours = getMinutesTime(workingEndTime);
+  const startWorkingMinutes = getMinutesTime(workingStartTime);
+  const endWorkingHMinutes = getMinutesTime(workingEndTime);
   const meetingStartMinutes = getMinutesTime(meetingStartTime);
-  const meetingEndMinutes = getMeetingDuration(meetingStartTime, meetingLengthTime);
+  const meetingEndMinutes = getMeetingEndTime(meetingStartTime, meetingLengthTime);
 
   // условие проверки
-  if (meetingEndMinutes <= endWorkingHours && meetingStartMinutes) {
+  if ((meetingEndMinutes <= endWorkingHMinutes) && (meetingStartMinutes >= startWorkingMinutes)) {
     return true;
   } else {
     return false;
   }
 };
-
 
 workingHours('08:00', '17:30', '14:00', 90);
 workingHours('8:0', '10:0', '8:0', 120);

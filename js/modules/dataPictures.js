@@ -1,5 +1,5 @@
 import { NAMES, MESSAGES, DESCRIPTIONS } from './dataset.js';
-import { getRandomInteger, getRandomArrayElement } from './random.js';
+import { getRandomInteger, getRandomArrayElement } from './utils.js';
 
 const PHOTOS_NUMBER = 25;
 
@@ -47,14 +47,14 @@ const createPhoto = (id) => {
 
 /**создания массива из 25 сгенерированных объектов.  */
 
-const getPhotos = () => {
+const createData = () => {
   const photos = [];
 
   for (let i = 0; i < PHOTOS_NUMBER; i++) {
-    photos.push(createPhoto(i));
+    photos.push(createPhoto(i + 1));
   }
 
   return photos;
 };
 
-export { getPhotos };
+export { createData };

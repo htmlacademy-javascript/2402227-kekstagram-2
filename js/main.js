@@ -1,5 +1,5 @@
-import { renderPictures } from './modules/renderPictures.js';
-import { createData } from './modules/dataPictures.js';
+import { renderPictures } from './modules/render-pictures.js';
+import { createData } from './modules/data-pictures.js';
 
 const createdPictures = createData();
 renderPictures(createdPictures);

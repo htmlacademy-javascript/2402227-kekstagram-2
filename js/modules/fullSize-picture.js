@@ -11,7 +11,9 @@ const bigPictureDescription = bigPictureModalElement.querySelector('.social__cap
 
 const template = document.querySelector('#comment').content.querySelector('.social__comment');
 const commentListElement = document.querySelector('.social__comments');
-// console.log(bigPictureShownComments);
+
+const socialCommentCount = bigPictureModalElement.querySelector('.social__comment-count');
+const commentLoader = bigPictureModalElement.querySelector('.comments-loader');
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -37,7 +39,7 @@ const renderComments = (comments) => {
 const renderBigPictureModalElement = (photo) => {
   bigPictureImage.src = photo.url;
   bigPictureLikes.textContent = photo.likes;
-  bigPictureShownComments.textContent = 2;
+  bigPictureShownComments.textContent = 5;
   bigPictureTotalComments.textContent = photo.comments.length;
   bigPictureDescription.textContent = photo.description;
 
@@ -45,16 +47,18 @@ const renderBigPictureModalElement = (photo) => {
 };
 
 // Open
-function openBigPictureModal(photo) {
+const openBigPictureModal = (photo) => {
   renderBigPictureModalElement(photo);
   bigPictureModalElement.classList.remove('hidden');
+  document.body.classList.add('.modal-open');
 
   document.addEventListener('keydown', onDocumentKeydown);
-}
+};
 
 // Close
 function closeBigPictureModal() {
   bigPictureModalElement.classList.add('hidden');
+  document.body.classList.remove('.modal-open');
 
   document.removeEventListener('keydown', onDocumentKeydown);
 }
@@ -63,17 +67,12 @@ closeBigPictureModalElement.addEventListener('click', () => {
   closeBigPictureModal();
 });
 
-// Open modal from allpreview
-const addEventListenerToBigPicture = (photos) => {
-  const pictureElements = document.querySelectorAll('.picture');
-  // console.log(pictureElements);
-  // console.log(photos);
-
-  for(let i = 0; i < photos.length; i++) {
-    pictureElements[i].addEventListener('click', () => {
-      openBigPictureModal(photos[i]);
-    });
-  }
+// Hide commens & comments count
+const socialCommentDelete = () => {
+  socialCommentCount.classList.add('hidden');
+  commentLoader.classList.add('hidden');
 };
 
-export { addEventListenerToBigPicture, openBigPictureModal };
+socialCommentDelete();
+
+export { openBigPictureModal };

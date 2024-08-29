@@ -1,3 +1,5 @@
+import { openBigPictureModal } from './fullSize-picture.js';
+
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const pictureListElement = document.querySelector('.pictures');
 
@@ -15,6 +17,10 @@ const renderPictures = (pictures) => {
     templatePicture.querySelector('.picture__likes').textContent = photo.likes;
 
     pictureListFragment.appendChild(templatePicture);
+
+    templatePicture.addEventListener('click', () => {
+      openBigPictureModal(photo);
+    });
   });
 
   pictureListElement.appendChild(pictureListFragment);

@@ -24,7 +24,7 @@ const renderNextComments = () => {
     commentListElement.appendChild(templateComment);
   });
 
-  currentCount = currentCount + renderedComments.length;
+  currentCount += renderedComments.length;
   bigPictureShownComments.textContent = currentCount;
 
   if (currentCount >= commentsArray.length) {
@@ -34,16 +34,19 @@ const renderNextComments = () => {
   }
 };
 
+const onCommentLoaderClick = () => renderNextComments();
+
 const renderComments = (comments) => {
   commentsArray = comments;
   renderNextComments();
 
-  commentLoader.addEventListener('click', renderNextComments);
+  commentLoader.addEventListener('click', onCommentLoaderClick);
 };
 
 const clearComments = () => {
   currentCount = 0;
   commentListElement.innerHTML = '';
+  commentLoader.removeEventListener('click', onCommentLoaderClick);
 };
 
 export { renderComments, clearComments };

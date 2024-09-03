@@ -1,6 +1,8 @@
 import {isEscapeKey} from './utils.js';
 import { renderComments, clearComments } from './render-comments.js';
 
+const COMMENT_ITEMS_COUNT = 5;
+
 const bigPictureModalElement = document.querySelector('.big-picture');
 const closeBigPictureModalElement = bigPictureModalElement.querySelector('.big-picture__cancel');
 const bigPictureImage = bigPictureModalElement.querySelector('.big-picture__img').querySelector('img');
@@ -19,11 +21,10 @@ const onDocumentKeydown = (evt) => {
 const renderBigPictureModalElement = (photo) => {
   bigPictureImage.src = photo.url;
   bigPictureLikes.textContent = photo.likes;
-  bigPictureShownComments.textContent = 5;
+  bigPictureShownComments.textContent = COMMENT_ITEMS_COUNT;
   bigPictureTotalComments.textContent = photo.comments.length;
   bigPictureDescription.textContent = photo.description;
 
-  clearComments();
   renderComments(photo.comments);
 };
 
@@ -32,15 +33,14 @@ const openBigPictureModal = (photo) => {
   renderBigPictureModalElement(photo);
   bigPictureModalElement.classList.remove('hidden');
   document.body.classList.add('.modal-open');
-
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
 // Close
 function closeBigPictureModal() {
+  clearComments();
   bigPictureModalElement.classList.add('hidden');
   document.body.classList.remove('.modal-open');
-
   document.removeEventListener('keydown', onDocumentKeydown);
 }
 

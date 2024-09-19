@@ -1,4 +1,4 @@
-import { openBigPictureModal } from './fullSize-picture.js';
+import { openBigPictureModal } from './full-size-picture.js';
 
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const pictureListElement = document.querySelector('.pictures');

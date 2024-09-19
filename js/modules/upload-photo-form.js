@@ -1,6 +1,6 @@
 import {isEscapeKey} from './utils.js';
-
-const pageBody = document.querySelector('body');
+import { resetValidator } from './validate-form.js';
+import { textHashtagsInput, textCommentInput } from './validate-form.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const uploadFileControl = imageUploadForm.querySelector('#upload-file');
@@ -9,32 +9,39 @@ const imageUploadCancelButton = imageUploadOverlay.querySelector('#upload-cancel
 
 // Закрытие модального окна -------------------------------------------------------------------
 const onImageUploadCancelButtonClick = () => {
-  closeImageEditor();
+  closeUploadModal();
+  resetValidator();
 };
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    closeImageEditor();
+
+    if(document.activeElement === textHashtagsInput || document.activeElement === textCommentInput) {
+      evt.stopPropagation();
+    } else {
+      closeUploadModal();
+      resetValidator();
+    }
   }
 };
 
-function closeImageEditor () {
+function closeUploadModal () {
   imageUploadOverlay.classList.add('hidden');
-  pageBody.classList.remove('modal-open');
+  document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   imageUploadCancelButton.removeEventListener('click', onImageUploadCancelButtonClick);
   uploadFileControl.value = '';
 }
 
 // Начало загрузки файла и открытие модального окна -------------------------------------------
-const startUploadModal = () => {
+const initUploadModal = () => {
   uploadFileControl.addEventListener('change', () => {
     imageUploadOverlay.classList.remove('hidden');
-    pageBody.classList.add('modal-open');
+    document.body.classList.add('modal-open');
     imageUploadCancelButton.addEventListener('click', onImageUploadCancelButtonClick);
     document.addEventListener('keydown', onDocumentKeydown);
   });
 };
 
-export { startUploadModal };
+export { initUploadModal };

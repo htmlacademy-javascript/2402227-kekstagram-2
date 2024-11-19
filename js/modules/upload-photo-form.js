@@ -1,6 +1,7 @@
 import {isEscapeKey} from './utils.js';
 import { resetValidator } from './validate-form.js';
 import { textHashtagsInput, textCommentInput } from './validate-form.js';
+import { resetEffect } from './slider-effects.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const uploadFileControl = imageUploadForm.querySelector('#upload-file');
@@ -11,6 +12,7 @@ const imageUploadCancelButton = imageUploadOverlay.querySelector('#upload-cancel
 const onImageUploadCancelButtonClick = () => {
   closeUploadModal();
   resetValidator();
+  resetEffect();
 };
 
 const onDocumentKeydown = (evt) => {
@@ -22,6 +24,7 @@ const onDocumentKeydown = (evt) => {
     } else {
       closeUploadModal();
       resetValidator();
+      resetEffect();
     }
   }
 };

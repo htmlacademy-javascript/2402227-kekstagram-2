@@ -1,5 +1,3 @@
-
-
 const SCALE_STEP = 0.25;
 const MIN_SCALE = 0.25;
 const MAX_SCALE = 1;
@@ -12,13 +10,11 @@ const scaleControlValue = imageUploadForm.querySelector('.scale__control--value'
 
 let scale = 1;
 
-// Update the scale of the img
 const updateScale = () => {
   imgUploadPreview.style.transform = `scale(${scale})`;
   scaleControlValue.value = `${scale * 100}%`;
 };
 
-// SmallerButton click
 const onSmallerClick = () => {
   if (scale > MIN_SCALE) {
     scale -= SCALE_STEP;
@@ -26,7 +22,6 @@ const onSmallerClick = () => {
   }
 };
 
-//BiggerButton click
 const onBiggerClick = () => {
   if (scale < MAX_SCALE) {
     scale += SCALE_STEP;
@@ -34,11 +29,16 @@ const onBiggerClick = () => {
   }
 };
 
-//Event listeners to the buttons
-scaleControlSmaller.addEventListener('click', onSmallerClick);
-scaleControlBigger.addEventListener('click', onBiggerClick);
+// Сбросить масштаб изображения
+const resetScale = () => {
+  scale = 1;
+  updateScale();
+};
 
-// Initial scale value
-document.addEventListener('DOMContentLoaded', updateScale);
+const initScale = () => {
+  updateScale();
+  scaleControlSmaller.addEventListener('click', onSmallerClick);
+  scaleControlBigger.addEventListener('click', onBiggerClick);
+};
 
-export { onSmallerClick, onBiggerClick };
+export { initScale, resetScale };

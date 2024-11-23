@@ -28,7 +28,6 @@ const renderBigPictureModalElement = (photo) => {
   renderComments(photo.comments);
 };
 
-// Open
 const openBigPictureModal = (photo) => {
   renderBigPictureModalElement(photo);
   bigPictureModalElement.classList.remove('hidden');
@@ -36,7 +35,6 @@ const openBigPictureModal = (photo) => {
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
-// Close
 function closeBigPictureModal() {
   clearComments();
   bigPictureModalElement.classList.add('hidden');

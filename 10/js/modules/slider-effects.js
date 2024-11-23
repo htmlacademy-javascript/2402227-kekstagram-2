@@ -6,6 +6,8 @@ const imgUploadPreview = imgUploadWrapper.querySelector('.img-upload__preview im
 const imageUploadForm = document.querySelector('.img-upload__form');
 const effectList = imageUploadForm.querySelector('.effects__list');
 
+const DEFAULT_EFFECT = 'none';
+
 const EFFECTS = {
   none: {
     filter: 'none',
@@ -63,81 +65,71 @@ const EFFECTS = {
   },
 };
 
-// Init slider
-window.noUiSlider.create(sliderElement, {
-  start: 100,
-  connect: 'lower',
-  range: {
-    'min': 0,
-    'max': 100,
-  },
-  step: 1,
-  format: {
-    to: (value) => Number.isInteger(value)
-      ? value.toFixed(0)
-      : value.toFixed(1),
-    from: (value) => parseFloat(value),
-  },
-});
-
-// Filter img
+// Эффект фильтрации картинки
 const applyFilter = (effect, value) => {
+  const { filter, unit } = EFFECTS[effect];
+  imgUploadPreview.style.filter = `${filter}(${value}${unit})`;
+  effectLevelValue.value = value;
+};
+
+const updateSlider = (effect) => {
   if (effect === 'none') {
     imgUploadPreview.style.filter = 'none';
     effectLevel.classList.add('hidden');
     effectLevelValue.value = '';
-  } else {
-    const { filter, unit } = EFFECTS[effect];
-    imgUploadPreview.style.filter = `${filter}(${value}${unit})`;
-    effectLevel.classList.remove('hidden');
-    effectLevelValue.value = value;
-  }
-};
-
-// Update Slider by effect
-const updateSlider = (effect) => {
-  if (effect === 'none') {
-    applyFilter('none', 0);
     sliderElement.noUiSlider.set(0);
 
     return;
   }
 
+  effectLevel.classList.remove('hidden');
   const { range, step } = EFFECTS[effect];
+
   sliderElement.noUiSlider.updateOptions({
     range: range,
     step: step,
-    start: range.min,
-    connect: 'lower',
+    start: range.max,
   });
 
-  sliderElement.noUiSlider.set(range.min);
+  sliderElement.noUiSlider.set(range.max);
 };
 
-// Change slider values
-sliderElement.noUiSlider.on('update', (values, handle) => {
-  const currentEffect = imageUploadForm.querySelector('input[name="effect"]:checked').value;
-  const value = values[handle];
-
-  applyFilter(currentEffect, value);
-});
-
-// Change effect
 const onEffectChange = (evt) => {
   const effect = evt.target.value;
   updateSlider(effect);
+
+  sliderElement.noUiSlider.on('update', (values, handle) => {
+    const value = values[handle];
+
+    applyFilter(effect, value);
+  });
 };
 
-effectList.addEventListener('change', onEffectChange);
-
-// Reset Effects
 const resetEffect = () => {
-  const defaultEffect = 'none';
-  const defaultRadio = imageUploadForm.querySelector(`#effect-${defaultEffect}`);
+  const defaultRadio = imageUploadForm.querySelector(`#effect-${DEFAULT_EFFECT}`);
   defaultRadio.checked = true;
-  updateSlider(defaultEffect);
+  updateSlider(DEFAULT_EFFECT);
 };
 
-resetEffect();
+const initSlider = () => {
+  noUiSlider.create(sliderElement, {
+    start: 100,
+    connect: 'lower',
+    range: {
+      'min': 0,
+      'max': 100,
+    },
+    step: 1,
+    format: {
+      to: (value) => Number.isInteger(value)
+        ? value.toFixed(0)
+        : value.toFixed(1),
+      from: (value) => parseFloat(value),
+    },
+  });
 
-export { resetEffect };
+  effectList.addEventListener('change', onEffectChange);
+  resetEffect();
+};
+
+export { initSlider, resetEffect };

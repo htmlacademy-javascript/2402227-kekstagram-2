@@ -5,7 +5,7 @@ import { validateForm } from './modules/validate-form.js';
 import { initScale } from './modules/photo-transform.js';
 import { initSlider } from './modules/slider-effects.js';
 import { getData } from './modules/api.js';
-import { showError } from './modules/error.js';
+import { showError } from './modules/message.js';
 
 //это как-будто больше не надо - позже удалить я меняю это на getData
 // const createdPictures = createData();

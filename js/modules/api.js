@@ -1,15 +1,18 @@
-const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagramgit';
+const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 
 const Route = {
   GET_DATA: '/data',
+  POST_DATA: '/',
 };
 
 const Method = {
   GET: 'GET',
+  POST: 'POST',
 };
 
 const ErrorText = {
   [Method.GET]: 'Не удалось загрузить данные. Попробуйте позже.',
+  [Method.POST]: 'Ошибка при отправке данных. Попробуйте еще раз.',
 };
 
 const load = (route, method = Method.GET, body = null) =>
@@ -26,4 +29,6 @@ const load = (route, method = Method.GET, body = null) =>
 
 const getData = () => load(Route.GET_DATA, Method.GET);
 
-export { getData };
+const sendFormData = (formData) => load(Route.POST_DATA, Method.POST, formData);
+
+export { getData, sendFormData };

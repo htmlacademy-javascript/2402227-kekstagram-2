@@ -1,3 +1,14 @@
+const showSuccess = () => {
+  const successTemplate = document.querySelector('#success').content.querySelector('.success');
+  const successElement = successTemplate.cloneNode(true);
+  document.body.appendChild(successElement);
+
+  setTimeout(() => {
+    successElement.remove();
+  }, 5000);
+
+};
+
 const showError = (message) => {
   const errorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
   const errorElement = errorTemplate.cloneNode(true);
@@ -9,4 +20,4 @@ const showError = (message) => {
   }, 5000);
 };
 
-export { showError };
+export { showSuccess, showError };

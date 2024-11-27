@@ -31,9 +31,9 @@ const formSubmitHandler = async (evt) => {
   evt.preventDefault();
   const isValid = validateForm();
 
-  console.log('Валидно', isValid);
-
-  if (!isValid) return;
+  if (!isValid) {
+    return;
+  }
 
   disableButton(submitButtonText.SENDING);
   try {

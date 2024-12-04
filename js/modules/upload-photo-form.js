@@ -2,8 +2,8 @@ import { isEscapeKey } from './utils.js';
 import { validateForm, resetValidator, textHashtagsInput, textCommentInput } from './validate-form.js';
 import { resetScale } from './photo-transform.js';
 import { resetEffect } from './slider-effects.js';
-import { sendFormData } from './api.js';
-import { showSuccess, showError } from './message.js';
+import { getData, sendFormData } from './api.js';
+import { showSuccess, showError, showDownloadError } from './message.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const uploadFileControl = imageUploadForm.querySelector('#upload-file');
@@ -11,7 +11,6 @@ const imageUploadOverlay = imageUploadForm.querySelector('.img-upload__overlay')
 const imageUploadSubmit = imageUploadForm.querySelector('.img-upload__submit');
 const imageUploadCancelButton = imageUploadOverlay.querySelector('#upload-cancel');
 
-// Кнопка отправки данных-------------------------------------------------------------------------
 const submitButtonText = {
   IDLE: 'Сохранить',
   SENDING: 'Сохраняю...',
@@ -27,7 +26,7 @@ const enableButton = (text) => {
   imageUploadSubmit.textContent = text;
 };
 
-const formSubmitHandler = async (evt) => {
+const onFormSubmit = async (evt) => {
   evt.preventDefault();
   const isValid = validateForm();
 
@@ -36,6 +35,7 @@ const formSubmitHandler = async (evt) => {
   }
 
   disableButton(submitButtonText.SENDING);
+
   try {
     await sendFormData(new FormData(evt.target));
     showSuccess();
@@ -45,6 +45,10 @@ const formSubmitHandler = async (evt) => {
   } finally {
     enableButton(submitButtonText.IDLE);
   }
+};
+
+const onDownloadError = (message) => {
+  showDownloadError(message);
 };
 
 const onImageUploadCancelButtonClick = () => {
@@ -76,10 +80,9 @@ function closeUploadModal () {
 
 // Начало загрузки файла и открытие модального окна -------------------------------------------
 const initUploadModal = () => {
-  uploadFileControl.addEventListener('change', () => {
-    openUploadModal();
-  });
-  imageUploadForm.addEventListener('submit', formSubmitHandler);
+  uploadFileControl.addEventListener('change', openUploadModal);
+  imageUploadForm.addEventListener('submit', onFormSubmit);
+  getData().catch((error) => onDownloadError(error.message));
 };
 
 function openUploadModal() {

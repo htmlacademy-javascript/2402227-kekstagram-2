@@ -88,6 +88,8 @@ const validateForm = () => {
   },
   'Длина комментария не может составлять больше 140 символов'
   );
+
+  return pristine.validate();
 };
 
 const resetValidator = () => {

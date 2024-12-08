@@ -5,12 +5,7 @@ const pictureListElement = document.querySelector('.pictures');
 
 const pictureListFragment = document.createDocumentFragment();
 
-const clearPicture = () => {
-  pictureListElement.querySelectorAll('a.picture').forEach((item) => item.remove());
-};
-
 const renderPictures = (pictures) => {
-  clearPicture();
   pictures.forEach((photo) => {
     const templatePicture = template.cloneNode(true);
     const image = templatePicture.querySelector('.picture__img');

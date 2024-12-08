@@ -1,41 +1,55 @@
 import { renderPictures } from './render-pictures.js';
-import { FILTER, SORTFUNC, MAX_PICTURES_COUNT, DEBOUNCE_DELAY} from './const.js';
+import { FILTER, MAX_PICTURES_COUNT, DEBOUNCE_DELAY} from './const.js';
 import { debounce } from './utils.js';
 
 const filterElement = document.querySelector('.img-filters');
-const ACTIVE_BUTTON = 'img-filters__button--active';
+const pictureListElement = document.querySelector('.pictures');
+const ACTIVE_BUTTON_CLASS = 'img-filters__button--active';
 
 let pictures = [];
 let currentFilter = FILTER.default;
 
+const clearPicture = () => {
+  pictureListElement.querySelectorAll('a.picture').forEach((item) => item.remove());
+};
+
 const applyFilter = () => {
   let filteredPictures = [];
 
-  if (currentFilter === FILTER.default) {
-    filteredPictures = [...pictures];
-  } else if (currentFilter === FILTER.random) {
-    filteredPictures = [...pictures]
-      .sort(SORTFUNC.random)
-      .slice(0, MAX_PICTURES_COUNT);
-  } else if (currentFilter === FILTER.discussed) {
-    filteredPictures = [...pictures]
-      .sort((SORTFUNC.discussed));
+  switch (currentFilter) {
+    case FILTER.default:
+      filteredPictures = [...pictures];
+      break;
+    case FILTER.random:
+      filteredPictures = [...pictures]
+        .sort(() => 0.5 - Math.random())
+        .slice(0, MAX_PICTURES_COUNT);
+      break;
+    case FILTER.discussed:
+      filteredPictures = [...pictures]
+        .sort((a, b) => b.comments.length - a.comments.length);
+      break;
+    default:
+      filteredPictures = [...pictures];
+      break;
   }
 
+  clearPicture();
   renderPictures(filteredPictures);
 };
 
 const onFilterChange = (evt) => {
   const targetButton = evt.target;
-  const activeButton = document.querySelector(`.${ACTIVE_BUTTON}`);
-  if (!targetButton.matches('button') || activeButton === targetButton) {
+  const activeButton = document.querySelector(`.${ACTIVE_BUTTON_CLASS}`);
+
+  if (!evt.target.id || evt.target.classList.contains(ACTIVE_BUTTON_CLASS)) {
     return;
   }
 
-  activeButton.classList.remove(ACTIVE_BUTTON);
-  targetButton.classList.add(ACTIVE_BUTTON);
-  currentFilter = targetButton.id;
+  activeButton.classList.remove(ACTIVE_BUTTON_CLASS);
+  targetButton.classList.add(ACTIVE_BUTTON_CLASS);
 
+  currentFilter = targetButton.id;
   applyFilter();
 };
 
@@ -43,7 +57,6 @@ const configFilter = (picturesData) => {
   pictures = picturesData;
   filterElement.classList.remove('img-filters--inactive');
   filterElement.addEventListener('click', debounce(onFilterChange, DEBOUNCE_DELAY));
-  pictures = picturesData;
 };
 
 export { configFilter };

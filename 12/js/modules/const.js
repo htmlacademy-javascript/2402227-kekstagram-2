@@ -10,11 +10,6 @@ const FILTER = {
   discussed: 'filter-discussed',
 };
 
-const SORTFUNC = {
-  random: () => 0.5 - Math.random(),
-  discussed: (a, b) => b.length - a.comments.length
-};
-
 const MAX_PICTURES_COUNT = 10;
 
 const DEBOUNCE_DELAY = 500;
@@ -27,7 +22,6 @@ export {
   MAX_SCALE,
   COMMENT_ITEMS_COUNT,
   FILTER,
-  SORTFUNC,
   MAX_PICTURES_COUNT,
   DEBOUNCE_DELAY,
   FILE_TYPES

@@ -5,10 +5,12 @@ import { initScale } from './modules/photo-transform.js';
 import { initSlider } from './modules/slider-effects.js';
 import { getData } from './modules/api.js';
 import { showDownloadError } from './modules/message.js';
+import { configFilter } from './modules/filter.js';
 
 getData()
   .then((data) => {
     renderPictures(data);
+    configFilter(data);
   })
   .catch((error) => {
     showDownloadError(error.message);

@@ -1,6 +1,4 @@
-const SCALE_STEP = 0.25;
-const MIN_SCALE = 0.25;
-const MAX_SCALE = 1;
+import { SCALE_STEP, MIN_SCALE, MAX_SCALE, } from './const.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const scaleControlSmaller = imageUploadForm.querySelector('.scale__control--smaller');

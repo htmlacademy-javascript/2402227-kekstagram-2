@@ -1,7 +1,6 @@
-import {isEscapeKey} from './utils.js';
+import { isEscapeKey } from './utils.js';
 import { renderComments, clearComments } from './render-comments.js';
-
-const COMMENT_ITEMS_COUNT = 5;
+import { COMMENT_ITEMS_COUNT } from './const.js';
 
 const bigPictureModalElement = document.querySelector('.big-picture');
 const closeBigPictureModalElement = bigPictureModalElement.querySelector('.big-picture__cancel');

@@ -5,6 +5,7 @@ const textCommentInput = imageUploadForm.querySelector('.text__description');
 
 const MAX_HASHTAGS = 5;
 const MAX_SYMBOLS = 20;
+const MAX_COMMENT_LENGTH = 140;
 
 const pristine = new Pristine(imageUploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -22,9 +23,11 @@ const hashtagValidators = [
       const hashtags = parseHashtags(value);
       for (let i = 0; i < hashtags.length; i++) {
         if (!/^#[a-za-яё0-9]+$/i.test(hashtags[i])) {
+
           return false;
         }
       }
+
       return true;
     }
   },
@@ -57,6 +60,11 @@ const hashtagValidators = [
     errorMessage: `Максимальная длина одного хештега - ${MAX_SYMBOLS} символов, включая решетку`,
     validator: (value) => {
       const hashtags = parseHashtags(value);
+
+      if (hashtags.length === 1 && hashtags[0] === '') {
+        return true;
+      }
+
       for (let i = 0; i < hashtags.length; i++) {
         return hashtags[i].length <= MAX_SYMBOLS;
       }
@@ -68,6 +76,7 @@ const hashtagValidators = [
       if (value === '') {
         return true;
       }
+
       return true;
     }
   },
@@ -78,15 +87,8 @@ const validateForm = () => {
     pristine.addValidator(textHashtagsInput, elem.validator, elem.errorMessage, 1, true);
   });
 
-  pristine.addValidator(textCommentInput, (value) => {
-    if (value === '') {
-
-      return true;
-    }
-
-    return value.length <= 140;
-  },
-  'Длина комментария не может составлять больше 140 символов'
+  pristine.addValidator(textCommentInput, (value) => value === '' || value.length <= MAX_COMMENT_LENGTH,
+    `Длина комментария не может составлять больше ${MAX_COMMENT_LENGTH} символов`
   );
 
   return pristine.validate();

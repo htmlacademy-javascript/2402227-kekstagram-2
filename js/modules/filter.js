@@ -1,6 +1,6 @@
 import { renderPictures } from './render-pictures.js';
 import { FILTER, MAX_PICTURES_COUNT, DEBOUNCE_DELAY} from './const.js';
-import { debounce } from './utils.js';
+import { applyDebounce } from './utils.js';
 
 const filterElement = document.querySelector('.img-filters');
 const pictureListElement = document.querySelector('.pictures');
@@ -38,7 +38,7 @@ const applyFilter = () => {
   renderPictures(filteredPictures);
 };
 
-const onFilterChange = (evt) => {
+const handleFilterChange = (evt) => {
   const targetButton = evt.target;
   const activeButton = document.querySelector(`.${ACTIVE_BUTTON_CLASS}`);
 
@@ -53,10 +53,10 @@ const onFilterChange = (evt) => {
   applyFilter();
 };
 
-const configFilter = (picturesData) => {
+const setupFilter = (picturesData) => {
   pictures = picturesData;
   filterElement.classList.remove('img-filters--inactive');
-  filterElement.addEventListener('click', debounce(onFilterChange, DEBOUNCE_DELAY));
+  filterElement.addEventListener('click', applyDebounce(handleFilterChange, DEBOUNCE_DELAY));
 };
 
-export { configFilter };
+export { setupFilter };

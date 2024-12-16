@@ -2,7 +2,7 @@ import { DEBOUNCE_DELAY } from './const.js';
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
+const applyDebounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
   let timeoutId;
   return (...args) => {
     clearTimeout(timeoutId);
@@ -10,4 +10,4 @@ const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
   };
 };
 
-export { isEscapeKey, debounce };
+export { isEscapeKey, applyDebounce };

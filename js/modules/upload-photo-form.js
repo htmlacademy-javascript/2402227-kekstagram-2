@@ -1,10 +1,10 @@
 import { isEscapeKey } from './utils.js';
 import { validateForm, resetValidator, textHashtagsInput, textCommentInput } from './validate-form.js';
 import { resetScale } from './photo-transform.js';
-import { resetEffect } from './slider-effects.js';
+import { setupSlider, resetEffect } from './slider-effects.js';
 import { getData, sendFormData } from './api.js';
 import { showSuccess, showError, showDownloadError } from './message.js';
-import { FILE_TYPES } from './const.js';
+import { FILE_EXTENSIONS } from './const.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const uploadFileControl = imageUploadForm.querySelector('#upload-file');
@@ -16,7 +16,7 @@ const imgUploadPreview = imgUploadWrapper.querySelector('.img-upload__preview im
 const imgEffectsPreview = document.querySelectorAll('.effects__preview');
 
 
-const submitButtonText = {
+const SubmitButtonText = {
   IDLE: 'Сохранить',
   SENDING: 'Сохраняю...',
 };
@@ -31,7 +31,7 @@ const enableButton = (text) => {
   imageUploadSubmit.textContent = text;
 };
 
-const onFormSubmit = async (evt) => {
+const handleFormSubmit = async (evt) => {
   evt.preventDefault();
   const isValid = validateForm();
 
@@ -39,7 +39,7 @@ const onFormSubmit = async (evt) => {
     return;
   }
 
-  disableButton(submitButtonText.SENDING);
+  disableButton(SubmitButtonText.SENDING);
 
   try {
     await sendFormData(new FormData(evt.target));
@@ -48,19 +48,19 @@ const onFormSubmit = async (evt) => {
   } catch (error) {
     showError();
   } finally {
-    enableButton(submitButtonText.IDLE);
+    enableButton(SubmitButtonText.IDLE);
   }
 };
 
-const onDownloadError = (message) => {
+const catchDownloadError = (message) => {
   showDownloadError(message);
 };
 
-const onImageUploadCancelButtonClick = () => {
+const handleImageUploadCancelButtonClick = () => {
   closeUploadModal();
 };
 
-const onDocumentKeydown = (evt) => {
+const handleDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
 
@@ -75,19 +75,23 @@ const onDocumentKeydown = (evt) => {
 function closeUploadModal () {
   imageUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocumentKeydown);
-  imageUploadCancelButton.removeEventListener('click', onImageUploadCancelButtonClick);
+  document.removeEventListener('keydown', handleDocumentKeydown);
+  imageUploadCancelButton.removeEventListener('click', handleImageUploadCancelButtonClick);
   uploadFileControl.value = '';
+
+  textHashtagsInput.value = '';
+  textCommentInput.value = '';
+
   resetValidator();
   resetScale();
   resetEffect();
 }
 
 // Начало загрузки файла и открытие модального окна -------------------------------------------
-const onFileInputChange = () => {
+const handleFileInputChange = () => {
   const file = uploadFileControl.files[0];
   const fileName = file.name.toLowerCase();
-  const matches = FILE_TYPES.some((type) => fileName.endsWith(type));
+  const matches = FILE_EXTENSIONS.some((type) => fileName.endsWith(type));
 
   if (matches) {
     const url = URL.createObjectURL(file);
@@ -100,21 +104,24 @@ const onFileInputChange = () => {
   }
 };
 
-const initUploadModal = () => {
-  uploadFileControl.addEventListener('change', onFileInputChange);
+const setupUploadModal = () => {
+  uploadFileControl.addEventListener('change', handleFileInputChange);
   uploadFileControl.addEventListener('change', openUploadModal);
-  imageUploadForm.addEventListener('submit', onFormSubmit);
-  getData().catch((error) => onDownloadError(error.message));
+  imageUploadForm.addEventListener('submit', handleFormSubmit);
+  getData().catch((error) => catchDownloadError(error.message));
 };
 
 function openUploadModal() {
   imageUploadOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  imageUploadCancelButton.addEventListener('click', onImageUploadCancelButtonClick);
-  document.addEventListener('keydown', onDocumentKeydown);
+  imageUploadCancelButton.addEventListener('click', handleImageUploadCancelButtonClick);
+  document.addEventListener('keydown', handleDocumentKeydown);
+
+  setupSlider();
+
   resetValidator();
   resetScale();
   resetEffect();
 }
 
-export { initUploadModal };
+export { setupUploadModal };

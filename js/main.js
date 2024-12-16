@@ -1,22 +1,22 @@
 import { renderPictures } from './modules/render-pictures.js';
-import { initUploadModal } from './modules/upload-photo-form.js';
+import { setupUploadModal } from './modules/upload-photo-form.js';
 import { validateForm } from './modules/validate-form.js';
-import { initScale } from './modules/photo-transform.js';
-import { initSlider } from './modules/slider-effects.js';
+import { setupScale } from './modules/photo-transform.js';
+import { setupSlider } from './modules/slider-effects.js';
 import { getData } from './modules/api.js';
 import { showDownloadError } from './modules/message.js';
-import { configFilter } from './modules/filter.js';
+import { setupFilter } from './modules/filter.js';
 
 getData()
   .then((data) => {
     renderPictures(data);
-    configFilter(data);
+    setupFilter(data);
   })
   .catch((error) => {
     showDownloadError(error.message);
   });
 
-initUploadModal();
+setupUploadModal();
 validateForm();
-initScale();
-initSlider();
+setupScale();
+setupSlider();

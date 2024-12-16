@@ -4,23 +4,41 @@ const successTemplate = document.querySelector('#success').content.querySelector
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 const errorDownloadTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
 
-const onSuccessElementClick = (evt) => {
+let isPopupOpen = false;
+
+const getSuccessElementClick = (evt) => {
   if (evt.target.classList.contains('success') || evt.target.classList.contains('success__button')) {
     closeMessage('.success');
   }
 };
 
-const onShowErrorElementClick = (evt) => {
+const getErrorElementClick = (evt) => {
   if (evt.target.classList.contains('error') || evt.target.classList.contains('error__button')) {
     closeMessage('.error');
   }
 };
 
-const onDocumentKeydown = (evt) => {
+const handleDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    closeMessage('.success');
-    closeMessage('.error');
+
+    if(isPopupOpen) {
+      const errorPopup = document.querySelector('.error');
+      if (errorPopup) {
+        errorPopup.remove();
+        isPopupOpen = false;
+        evt.stopPropagation();
+
+        return;
+      }
+
+      const successPopup = document.querySelector('.success');
+      if(successPopup) {
+        successPopup.remove();
+        isPopupOpen = false;
+        evt.stopPropagation();
+      }
+    }
   }
 };
 
@@ -28,7 +46,8 @@ function closeMessage(selector) {
   const messageElement = document.querySelector(selector);
   if (messageElement) {
     messageElement.remove();
-    document.removeEventListener('keydown', onDocumentKeydown);
+    isPopupOpen = false;
+    document.removeEventListener('keydown', handleDocumentKeydown);
   }
 }
 
@@ -36,16 +55,18 @@ const showSuccess = () => {
   const successElement = successTemplate.cloneNode(true);
   document.body.appendChild(successElement);
 
-  document.addEventListener('keydown', onDocumentKeydown);
-  successElement.addEventListener('click', onSuccessElementClick);
+  isPopupOpen = true;
+  document.addEventListener('keydown', handleDocumentKeydown);
+  successElement.addEventListener('click', getSuccessElementClick);
 };
 
 const showError = () => {
   const showErrorElement = errorTemplate.cloneNode(true);
   document.body.appendChild(showErrorElement);
 
-  document.addEventListener('keydown', onDocumentKeydown);
-  showErrorElement.addEventListener('click', onShowErrorElementClick);
+  isPopupOpen = true;
+  document.addEventListener('keydown', handleDocumentKeydown);
+  showErrorElement.addEventListener('click', getErrorElementClick);
 };
 
 const showDownloadError = (message) => {

@@ -1,11 +1,3 @@
-const imgUploadWrapper = document.querySelector('.img-upload__wrapper');
-const sliderElement = imgUploadWrapper.querySelector('.effect-level__slider');
-const effectLevel = imgUploadWrapper.querySelector('.img-upload__effect-level');
-const effectLevelValue = imgUploadWrapper.querySelector('.effect-level__value');
-const imgUploadPreview = imgUploadWrapper.querySelector('.img-upload__preview img');
-const imageUploadForm = document.querySelector('.img-upload__form');
-const effectList = imageUploadForm.querySelector('.effects__list');
-
 const DEFAULT_EFFECT = 'none';
 
 const EFFECTS = {
@@ -65,6 +57,14 @@ const EFFECTS = {
   },
 };
 
+const imgUploadWrapper = document.querySelector('.img-upload__wrapper');
+const sliderElement = imgUploadWrapper.querySelector('.effect-level__slider');
+const effectLevel = imgUploadWrapper.querySelector('.img-upload__effect-level');
+const effectLevelValue = imgUploadWrapper.querySelector('.effect-level__value');
+const imgUploadPreview = imgUploadWrapper.querySelector('.img-upload__preview img');
+const imageUploadForm = document.querySelector('.img-upload__form');
+const effectList = imageUploadForm.querySelector('.effects__list');
+
 // Эффект фильтрации картинки
 const applyFilter = (effect, value) => {
   const { filter, unit } = EFFECTS[effect];
@@ -94,7 +94,7 @@ const updateSlider = (effect) => {
   sliderElement.noUiSlider.set(range.max);
 };
 
-const onEffectChange = (evt) => {
+const handleEffectChange = (evt) => {
   const effect = evt.target.value;
   updateSlider(effect);
 
@@ -111,7 +111,11 @@ const resetEffect = () => {
   updateSlider(DEFAULT_EFFECT);
 };
 
-const initSlider = () => {
+const setupSlider = () => {
+  if (sliderElement.noUiSlider) {
+    sliderElement.noUiSlider.destroy();
+  }
+
   noUiSlider.create(sliderElement, {
     start: 100,
     connect: 'lower',
@@ -128,8 +132,8 @@ const initSlider = () => {
     },
   });
 
-  effectList.addEventListener('change', onEffectChange);
   resetEffect();
+  effectList.addEventListener('change', handleEffectChange);
 };
 
-export { initSlider, resetEffect };
+export { setupSlider, resetEffect };

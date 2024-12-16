@@ -1,6 +1,6 @@
 const COUNT_STEP = 5;
 let currentCount = 0;
-let commentsArray = [];
+let comments = [];
 
 const template = document.querySelector('#comment').content.querySelector('.social__comment');
 const commentListElement = document.querySelector('.social__comments');
@@ -10,7 +10,7 @@ const commentLoader = bigPictureModalElement.querySelector('.comments-loader');
 const bigPictureShownComments = bigPictureModalElement.querySelector('.social__comment-shown-count');
 
 const renderNextComments = () => {
-  const renderedComments = commentsArray.slice(currentCount, currentCount + COUNT_STEP);
+  const renderedComments = comments.slice(currentCount, currentCount + COUNT_STEP);
 
   renderedComments.forEach((comment) => {
     const templateComment = template.cloneNode(true);
@@ -27,26 +27,26 @@ const renderNextComments = () => {
   currentCount += renderedComments.length;
   bigPictureShownComments.textContent = currentCount;
 
-  if (currentCount >= commentsArray.length) {
+  if (currentCount >= comments.length) {
     commentLoader.classList.add('hidden');
   } else {
     commentLoader.classList.remove('hidden');
   }
 };
 
-const onCommentLoaderClick = () => renderNextComments();
+const handleCommentLoaderClick = () => renderNextComments();
 
-const renderComments = (comments) => {
-  commentsArray = comments;
+const renderComments = (commentList) => {
+  comments = commentList;
   renderNextComments();
 
-  commentLoader.addEventListener('click', onCommentLoaderClick);
+  commentLoader.addEventListener('click', handleCommentLoaderClick);
 };
 
 const clearComments = () => {
   currentCount = 0;
   commentListElement.innerHTML = '';
-  commentLoader.removeEventListener('click', onCommentLoaderClick);
+  commentLoader.removeEventListener('click', handleCommentLoaderClick);
 };
 
 export { renderComments, clearComments };

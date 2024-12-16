@@ -13,14 +13,14 @@ const updateScale = () => {
   scaleControlValue.value = `${scale * 100}%`;
 };
 
-const onSmallerClick = () => {
+const handleSmallerClick = () => {
   if (scale > MIN_SCALE) {
     scale -= SCALE_STEP;
     updateScale();
   }
 };
 
-const onBiggerClick = () => {
+const handleBiggerClick = () => {
   if (scale < MAX_SCALE) {
     scale += SCALE_STEP;
     updateScale();
@@ -33,10 +33,10 @@ const resetScale = () => {
   updateScale();
 };
 
-const initScale = () => {
+const setupScale = () => {
   updateScale();
-  scaleControlSmaller.addEventListener('click', onSmallerClick);
-  scaleControlBigger.addEventListener('click', onBiggerClick);
+  scaleControlSmaller.addEventListener('click', handleSmallerClick);
+  scaleControlBigger.addEventListener('click', handleBiggerClick);
 };
 
-export { initScale, resetScale };
+export { setupScale, resetScale };

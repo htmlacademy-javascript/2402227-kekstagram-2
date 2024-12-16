@@ -34,19 +34,19 @@ const renderNextComments = () => {
   }
 };
 
-const handleCommentLoaderClick = () => renderNextComments();
+const onCommentLoaderClick = () => renderNextComments();
 
 const renderComments = (commentList) => {
   comments = commentList;
   renderNextComments();
 
-  commentLoader.addEventListener('click', handleCommentLoaderClick);
+  commentLoader.addEventListener('click', onCommentLoaderClick);
 };
 
 const clearComments = () => {
   currentCount = 0;
   commentListElement.innerHTML = '';
-  commentLoader.removeEventListener('click', handleCommentLoaderClick);
+  commentLoader.removeEventListener('click', onCommentLoaderClick);
 };
 
 export { renderComments, clearComments };

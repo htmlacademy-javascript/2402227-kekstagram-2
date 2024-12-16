@@ -94,7 +94,7 @@ const updateSlider = (effect) => {
   sliderElement.noUiSlider.set(range.max);
 };
 
-const handleEffectChange = (evt) => {
+const onEffectChange = (evt) => {
   const effect = evt.target.value;
   updateSlider(effect);
 
@@ -111,7 +111,7 @@ const resetEffect = () => {
   updateSlider(DEFAULT_EFFECT);
 };
 
-const setupSlider = () => {
+const initSlider = () => {
   if (sliderElement.noUiSlider) {
     sliderElement.noUiSlider.destroy();
   }
@@ -133,7 +133,7 @@ const setupSlider = () => {
   });
 
   resetEffect();
-  effectList.addEventListener('change', handleEffectChange);
+  effectList.addEventListener('change', onEffectChange);
 };
 
-export { setupSlider, resetEffect };
+export { initSlider, resetEffect };

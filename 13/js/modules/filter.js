@@ -38,7 +38,7 @@ const applyFilter = () => {
   renderPictures(filteredPictures);
 };
 
-const handleFilterChange = (evt) => {
+const onFilterChange = (evt) => {
   const targetButton = evt.target;
   const activeButton = document.querySelector(`.${ACTIVE_BUTTON_CLASS}`);
 
@@ -53,10 +53,10 @@ const handleFilterChange = (evt) => {
   applyFilter();
 };
 
-const setupFilter = (picturesData) => {
+const configFilter = (picturesData) => {
   pictures = picturesData;
   filterElement.classList.remove('img-filters--inactive');
-  filterElement.addEventListener('click', applyDebounce(handleFilterChange, DEBOUNCE_DELAY));
+  filterElement.addEventListener('click', applyDebounce(onFilterChange, DEBOUNCE_DELAY));
 };
 
-export { setupFilter };
+export { configFilter };

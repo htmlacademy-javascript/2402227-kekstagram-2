@@ -2,8 +2,8 @@ import { isEscapeKey } from './utils.js';
 import { validateForm, resetValidator, textHashtagsInput, textCommentInput } from './validate-form.js';
 import { resetScale } from './photo-transform.js';
 import { initSlider, resetEffect } from './slider-effects.js';
-import { getData, sendFormData } from './api.js';
-import { showSuccess, showError, showDownloadError } from './message.js';
+import { sendFormData } from './api.js';
+import { showSuccess, showError } from './message.js';
 import { FILE_EXTENSIONS } from './const.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
@@ -52,10 +52,6 @@ const onFormSubmit = async (evt) => {
   }
 };
 
-const onDownloadError = (message) => {
-  showDownloadError(message);
-};
-
 const onImageUploadCancelButtonClick = () => {
   closeUploadModal();
 };
@@ -77,18 +73,13 @@ const onDocumentKeydown = (evt) => {
 };
 
 function closeUploadModal () {
-  if (document.body.classList.contains('data-error')) {
-    return;
-  }
-
   imageUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   imageUploadCancelButton.removeEventListener('click', onImageUploadCancelButtonClick);
   uploadFileControl.value = '';
 
-  textHashtagsInput.value = '';
-  textCommentInput.value = '';
+  imageUploadForm.reset();
 
   resetValidator();
   resetScale();
@@ -116,7 +107,6 @@ const initUploadModal = () => {
   uploadFileControl.addEventListener('change', onFileInputChange);
   uploadFileControl.addEventListener('change', openUploadModal);
   imageUploadForm.addEventListener('submit', onFormSubmit);
-  getData().catch((error) => onDownloadError(error.message));
 };
 
 function openUploadModal() {

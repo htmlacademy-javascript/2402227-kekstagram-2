@@ -1,11 +1,11 @@
+const MAX_HASHTAGS = 5;
+const MAX_SYMBOLS = 20;
+const MAX_COMMENT_LENGTH = 140;
+
 // Переменные: хештег и коммент
 const imageUploadForm = document.querySelector('.img-upload__form');
 const textHashtagsInput = imageUploadForm.querySelector('.text__hashtags');
 const textCommentInput = imageUploadForm.querySelector('.text__description');
-
-const MAX_HASHTAGS = 5;
-const MAX_SYMBOLS = 20;
-const MAX_COMMENT_LENGTH = 140;
 
 const pristine = new Pristine(imageUploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -16,10 +16,13 @@ const pristine = new Pristine(imageUploadForm, {
 // Разделение строки на массив + нечувствителен к регистру--------------------------------------
 const parseHashtags = (value) => value.trim().toLowerCase().split(/\s+/);
 
-const hashtagValidators = [
+const hashtagRules = [
   {
     errorMessage: 'Хештег должен начинаться с символа #, состоять из букв и чисел и не может содержать пробелы, спецсимволы, символы пунктуации, эмодзи и т.д.',
     validator: (value) => {
+      if (value.trim() === '') {
+        return true;
+      }
       const hashtags = parseHashtags(value);
       for (let i = 0; i < hashtags.length; i++) {
         if (!/^#[a-za-яё0-9]+$/i.test(hashtags[i])) {
@@ -70,20 +73,10 @@ const hashtagValidators = [
       }
     }
   },
-  {
-    errorMessage: 'Xэштеги необязательны',
-    validator: (value) => {
-      if (value === '') {
-        return true;
-      }
-
-      return true;
-    }
-  },
 ];
 
 const validateForm = () => {
-  hashtagValidators.forEach((elem) => {
+  hashtagRules.forEach((elem) => {
     pristine.addValidator(textHashtagsInput, elem.validator, elem.errorMessage, 1, true);
   });
 

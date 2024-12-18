@@ -1,6 +1,6 @@
 import { renderPictures } from './render-pictures.js';
 import { FILTER, MAX_PICTURES_COUNT, DEBOUNCE_DELAY} from './const.js';
-import { debounce } from './utils.js';
+import { applyDebounce } from './utils.js';
 
 const filterElement = document.querySelector('.img-filters');
 const pictureListElement = document.querySelector('.pictures');
@@ -56,7 +56,7 @@ const onFilterChange = (evt) => {
 const configFilter = (picturesData) => {
   pictures = picturesData;
   filterElement.classList.remove('img-filters--inactive');
-  filterElement.addEventListener('click', debounce(onFilterChange, DEBOUNCE_DELAY));
+  filterElement.addEventListener('click', applyDebounce(onFilterChange, DEBOUNCE_DELAY));
 };
 
 export { configFilter };

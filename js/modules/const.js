@@ -14,7 +14,7 @@ const MAX_PICTURES_COUNT = 10;
 
 const DEBOUNCE_DELAY = 500;
 
-const FILE_TYPES = ['.jpg', '.jpeg', '.png', '.gif'];
+const FILE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif'];
 
 export {
   SCALE_STEP,
@@ -24,5 +24,5 @@ export {
   FILTER,
   MAX_PICTURES_COUNT,
   DEBOUNCE_DELAY,
-  FILE_TYPES
+  FILE_EXTENSIONS
 };

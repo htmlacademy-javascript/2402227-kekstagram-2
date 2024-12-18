@@ -1,10 +1,10 @@
 import { isEscapeKey } from './utils.js';
 import { validateForm, resetValidator, textHashtagsInput, textCommentInput } from './validate-form.js';
 import { resetScale } from './photo-transform.js';
-import { resetEffect } from './slider-effects.js';
-import { getData, sendFormData } from './api.js';
-import { showSuccess, showError, showDownloadError } from './message.js';
-import { FILE_TYPES } from './const.js';
+import { initSlider, resetEffect } from './slider-effects.js';
+import { sendFormData } from './api.js';
+import { showSuccess, showError } from './message.js';
+import { FILE_EXTENSIONS } from './const.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const uploadFileControl = imageUploadForm.querySelector('#upload-file');
@@ -16,7 +16,7 @@ const imgUploadPreview = imgUploadWrapper.querySelector('.img-upload__preview im
 const imgEffectsPreview = document.querySelectorAll('.effects__preview');
 
 
-const submitButtonText = {
+const SubmitButtonText = {
   IDLE: 'Сохранить',
   SENDING: 'Сохраняю...',
 };
@@ -39,7 +39,7 @@ const onFormSubmit = async (evt) => {
     return;
   }
 
-  disableButton(submitButtonText.SENDING);
+  disableButton(SubmitButtonText.SENDING);
 
   try {
     await sendFormData(new FormData(evt.target));
@@ -48,12 +48,8 @@ const onFormSubmit = async (evt) => {
   } catch (error) {
     showError();
   } finally {
-    enableButton(submitButtonText.IDLE);
+    enableButton(SubmitButtonText.IDLE);
   }
-};
-
-const onDownloadError = (message) => {
-  showDownloadError(message);
 };
 
 const onImageUploadCancelButtonClick = () => {
@@ -63,6 +59,10 @@ const onImageUploadCancelButtonClick = () => {
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
+
+    if(document.body.classList.contains('data-error')) {
+      return;
+    }
 
     if(document.activeElement === textHashtagsInput || document.activeElement === textCommentInput) {
       evt.stopPropagation();
@@ -78,6 +78,9 @@ function closeUploadModal () {
   document.removeEventListener('keydown', onDocumentKeydown);
   imageUploadCancelButton.removeEventListener('click', onImageUploadCancelButtonClick);
   uploadFileControl.value = '';
+
+  imageUploadForm.reset();
+
   resetValidator();
   resetScale();
   resetEffect();
@@ -87,7 +90,7 @@ function closeUploadModal () {
 const onFileInputChange = () => {
   const file = uploadFileControl.files[0];
   const fileName = file.name.toLowerCase();
-  const matches = FILE_TYPES.some((type) => fileName.endsWith(type));
+  const matches = FILE_EXTENSIONS.some((type) => fileName.endsWith(type));
 
   if (matches) {
     const url = URL.createObjectURL(file);
@@ -104,7 +107,6 @@ const initUploadModal = () => {
   uploadFileControl.addEventListener('change', onFileInputChange);
   uploadFileControl.addEventListener('change', openUploadModal);
   imageUploadForm.addEventListener('submit', onFormSubmit);
-  getData().catch((error) => onDownloadError(error.message));
 };
 
 function openUploadModal() {
@@ -112,6 +114,9 @@ function openUploadModal() {
   document.body.classList.add('modal-open');
   imageUploadCancelButton.addEventListener('click', onImageUploadCancelButtonClick);
   document.addEventListener('keydown', onDocumentKeydown);
+
+  initSlider();
+
   resetValidator();
   resetScale();
   resetEffect();

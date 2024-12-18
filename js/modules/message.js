@@ -19,8 +19,11 @@ const onShowErrorElementClick = (evt) => {
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    closeMessage('.success');
-    closeMessage('.error');
+    if (document.body.classList.contains('data-error')) {
+      closeMessage('.error');
+    } else {
+      closeMessage('.success');
+    }
   }
 };
 
@@ -29,6 +32,7 @@ function closeMessage(selector) {
   if (messageElement) {
     messageElement.remove();
     document.removeEventListener('keydown', onDocumentKeydown);
+    document.body.classList.remove('data-error');
   }
 }
 
@@ -43,6 +47,7 @@ const showSuccess = () => {
 const showError = () => {
   const showErrorElement = errorTemplate.cloneNode(true);
   document.body.appendChild(showErrorElement);
+  document.body.classList.add('data-error');
 
   document.addEventListener('keydown', onDocumentKeydown);
   showErrorElement.addEventListener('click', onShowErrorElementClick);
